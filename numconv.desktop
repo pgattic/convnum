@@ -1,0 +1,14 @@
+[Desktop Entry]
+
+Type=Application
+
+# The version of the desktop entry specification to which this file complies
+Version=1.0
+
+Name=numconv
+Comment=Convert between numerical bases
+Exec=/usr/local/bin/numconv
+Terminal=false
+Categories=Math;Education;Utility
+
+
