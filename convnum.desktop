@@ -5,9 +5,9 @@ Type=Application
 # The version of the desktop entry specification to which this file complies
 Version=1.0
 
-Name=numconv
+Name=convnum
 Comment=Convert between numerical bases
-Exec=/usr/local/bin/numconv
+Exec=/usr/local/bin/convnum
 Terminal=false
 Categories=Math;Education;Utility
 

@@ -1,22 +1,24 @@
 use eframe::egui::{self, CentralPanel, TextEdit, Ui};
 
-const APP_ID: &str = "com.pgattic.numconv";
+const APP_ID: &str = "com.pgattic.convnum";
 
 fn main() {
     let app = MyApp {
-        dec_input: String::from("0"),
-        hex_input: String::from("0"),
-        bin_input: String::from("0"),
-        oct_input: String::from("0"),
+        first_frame: true,
+        dec_input: String::new(),
+        hex_input: String::new(),
+        bin_input: String::new(),
+        oct_input: String::new(),
     };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_inner_size([240.0, 240.0])
+            .with_resizable(false)
             .with_app_id(APP_ID),
         ..Default::default()
     };
     let _ = eframe::run_native(
-        "Numconv",
+        "Convnum",
         options,
         Box::new(|_cc| {
             Box::<MyApp>::new(app)
@@ -25,6 +27,7 @@ fn main() {
 }
 
 struct MyApp {
+    first_frame: bool,
     dec_input: String,
     hex_input: String,
     bin_input: String,
@@ -33,6 +36,9 @@ struct MyApp {
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        //if ctx.input().key_pressed(Key::Escape) {
+        //    frame.quit();
+        //}
         CentralPanel::default().show(ctx, |ui| {
             // Display and handle the text boxes
             show_text_boxes(ui, self);
@@ -46,9 +52,13 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
         TextEdit::singleline(&mut app.dec_input)
             .horizontal_align(egui::Align::Max)
     );
+    if app.first_frame {
+        decimal_response.request_focus();
+        app.first_frame = false;
+    }
     // Update the other inputs
     if decimal_response.changed() {
-        if let Ok(value) = app.dec_input.parse::<i64>() {
+        if let Ok(value) = app.dec_input.parse::<i128>() {
             app.hex_input = format!("{:X}", value);
             app.bin_input = format!("{:b}", value);
             app.oct_input = format!("{:o}", value);
@@ -66,7 +76,7 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
     );
     // Update the other inputs
     if hex_response.changed() {
-        if let Ok(value) = i64::from_str_radix(&app.hex_input, 16) {
+        if let Ok(value) = i128::from_str_radix(&app.hex_input, 16) {
             app.dec_input = format!("{}", value);
             app.bin_input = format!("{:b}", value);
             app.oct_input = format!("{:o}", value);
@@ -83,7 +93,7 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             .horizontal_align(egui::Align::Max)
     );
     if bin_response.changed() {
-        if let Ok(value) = i64::from_str_radix(&app.bin_input, 2) {
+        if let Ok(value) = i128::from_str_radix(&app.bin_input, 2) {
             app.dec_input = format!("{}", value);
             app.hex_input = format!("{:X}", value);
             app.oct_input = format!("{:o}", value);
@@ -100,7 +110,7 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             .horizontal_align(egui::Align::Max)
     );
     if bin_response.changed() {
-        if let Ok(value) = i64::from_str_radix(&app.oct_input, 8) {
+        if let Ok(value) = i128::from_str_radix(&app.oct_input, 8) {
             app.dec_input = format!("{}", value);
             app.hex_input = format!("{:X}", value);
             app.bin_input = format!("{:b}", value);
@@ -115,7 +125,7 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
     //    ui.label("Made by pgattic with egui.");
     //    ui.hyperlink_to(
     //        format!("{} Star on GitHub", egui::special_emojis::GITHUB),
-    //        "https://github.com/pgattic/numconv",
+    //        "https://github.com/pgattic/convnum",
     //    );
     //});
 }

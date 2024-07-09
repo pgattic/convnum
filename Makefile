@@ -1,5 +1,5 @@
 
-NAME=numconv
+NAME=convnum
 PREFIX=/usr/local
 
 all:
