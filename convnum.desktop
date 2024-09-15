@@ -8,6 +8,7 @@ Version=1.0
 Name=convnum
 Comment=Convert between numerical bases
 Exec=/usr/local/bin/convnum
+# Icon=
 Terminal=false
 Categories=Math;Education;Utility
 

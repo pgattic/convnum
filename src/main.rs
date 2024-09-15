@@ -9,6 +9,7 @@ fn main() {
         hex_input: String::new(),
         bin_input: String::new(),
         oct_input: String::new(),
+        utf_input: String::new(),
     };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
@@ -32,6 +33,7 @@ struct MyApp {
     hex_input: String,
     bin_input: String,
     oct_input: String,
+    utf_input: String,
 }
 
 impl eframe::App for MyApp {
@@ -44,6 +46,10 @@ impl eframe::App for MyApp {
             show_text_boxes(ui, self);
         });
     }
+}
+
+fn to_ascii(value: i128) -> String {
+    String::from_utf8(value.to_be_bytes().to_vec()).unwrap_or(String::new())
 }
 
 fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
@@ -62,10 +68,12 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             app.hex_input = format!("{:X}", value);
             app.bin_input = format!("{:b}", value);
             app.oct_input = format!("{:o}", value);
+            app.utf_input = to_ascii(value);
         } else {
             app.hex_input.clear();
             app.bin_input.clear();
             app.oct_input.clear();
+            app.utf_input.clear();
         }
     }
 
@@ -80,10 +88,12 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             app.dec_input = format!("{}", value);
             app.bin_input = format!("{:b}", value);
             app.oct_input = format!("{:o}", value);
+            app.utf_input = to_ascii(value);
         } else {
             app.dec_input.clear();
             app.bin_input.clear();
             app.oct_input.clear();
+            app.utf_input.clear();
         }
     }
 
@@ -97,10 +107,12 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             app.dec_input = format!("{}", value);
             app.hex_input = format!("{:X}", value);
             app.oct_input = format!("{:o}", value);
+            app.utf_input = to_ascii(value);
         } else {
             app.dec_input.clear();
             app.hex_input.clear();
             app.oct_input.clear();
+            app.utf_input.clear();
         }
     }
 
@@ -114,11 +126,21 @@ fn show_text_boxes(ui: &mut Ui, app: &mut MyApp) {
             app.dec_input = format!("{}", value);
             app.hex_input = format!("{:X}", value);
             app.bin_input = format!("{:b}", value);
+            app.utf_input = to_ascii(value);
         } else {
             app.dec_input.clear();
             app.hex_input.clear();
             app.bin_input.clear();
+            app.utf_input.clear();
         }
+    }
+
+    ui.label("ASCII:");
+    let utf_response = ui.add(
+        TextEdit::singleline(&mut app.utf_input)
+            .horizontal_align(egui::Align::Max)
+    );
+    if utf_response.changed() {
     }
 
     //ui.vertical_centered(|ui| {
